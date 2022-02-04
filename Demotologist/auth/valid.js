@@ -35,8 +35,43 @@ exports.login_valid = (data) => {
             .required(),
 
         password: Joi.string()
-            .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
             .required(),
     })
     return loginSchema.validate(data);
+}
+
+
+
+exports.booking_valid = (data) => {
+
+    const bookingSchema = Joi.object({
+        name: Joi.string()
+            .alphanum()
+            .min(5)
+            .max(255)
+            .required(),
+
+        email: Joi.string()
+            .email()
+            .required(),
+
+        phone: Joi.string()
+            .min(10)
+            .max(10)
+            .required(),
+
+        city:Joi.string()
+        .required(),
+
+        state:Joi.string()
+        .required(),
+
+        date:Joi.string()
+        .required(),
+
+        message:Joi.string()
+        .required()
+        
+    })
+    return bookingSchema.validate(data);
 }

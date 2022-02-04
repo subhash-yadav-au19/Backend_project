@@ -2,7 +2,6 @@ const bcrypt = require('bcrypt')
 const User = require('../models/usermodel')
 const { reg_valid, login_valid } = require('../auth/valid')
 const jwt = require('jsonwebtoken')
-const res = require('express/lib/response')
 require('dotenv').config()
 
 
@@ -36,8 +35,9 @@ exports.registerUser = async (req, res) => {
 
         try {
             //save to database
-            const result = newdata.save()
-            res.send(newdata)
+            const result = await newdata.save()
+            const {...data}=result._doc
+            res.send(data)
         } catch (error) {
             res.send(error)
         }
@@ -90,7 +90,7 @@ exports.loginUser =async (req, res) => {
                 refToken:refToken
             })
 
-        } catch (error) {
+        } catch (error) { 
             res.send(error)
         }
     } catch (error) {
@@ -101,27 +101,10 @@ exports.loginUser =async (req, res) => {
 
 
 
-exports.admin = (req,res)=>{
-    const {role} = req.user
-    if(role == 'admin'){
-        const data = req.body
-        return res.send('admin')
-    }
-    
-    res.json({
-        data:data
-    })
-}
+
 
 exports.dashboard = (req, res) => {
     res.send('dashboard')
 }
 
 
-// exports.logout = async(req,res,next)=>{
-//     const {parmentToken} = req.body
-//     refreshToken=refreshToken.filter(token=>token!=parmentToken)
-//     res.json({
-//         msg:'logout'
-//     })
-// }
